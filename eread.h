@@ -145,8 +145,8 @@ void ereader_print_symbols(void* elf_data, Elf64_Ehdr* elf_header, Elf64_Shdr* e
 
 void ereader_print_rela_type(unsigned char);
 
-void ereader_print_rela_section(void* elf_data, Elf64_Shdr* elf_sections,  Elf64_Shdr* elf_symtab_sh, Elf64_Shdr* elf_rela_sh, Elf64_Rela* elf_rela, Elf64_Sym* elf_rela_sym);
-void ereader_print_rel_section(void* elf_data, Elf64_Shdr* elf_sections,  Elf64_Shdr* elf_symtab_sh, Elf64_Shdr* elf_rela_sh, Elf64_Rel* elf_rel, Elf64_Sym* elf_rela_sym);
+void ereader_print_rela_section(char* section_name, void* elf_data, Elf64_Shdr* elf_sections,  Elf64_Shdr* elf_symtab_sh, Elf64_Shdr* elf_rela_sh, Elf64_Rela* elf_rela, Elf64_Sym* elf_rela_sym);
+void ereader_print_rel_section(char* section_name, void* elf_data, Elf64_Shdr* elf_sections,  Elf64_Shdr* elf_symtab_sh, Elf64_Shdr* elf_rela_sh, Elf64_Rel* elf_rel, Elf64_Sym* elf_rela_sym);
 
 
 #endif

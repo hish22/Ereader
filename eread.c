@@ -770,7 +770,7 @@ void ereader_print_rela_type(unsigned char rel_type){
     printf("  Relocation type %-18s: %s\n","",rel_type_str);
 }
 
-void ereader_print_rela_section(void* elf_data, Elf64_Shdr* elf_sections, Elf64_Shdr* elf_symtab_sh , Elf64_Shdr* elf_rela_sh, Elf64_Rela* elf_rela, Elf64_Sym* elf_rela_sym){
+void ereader_print_rela_section(char* section_name, void* elf_data, Elf64_Shdr* elf_sections, Elf64_Shdr* elf_symtab_sh , Elf64_Shdr* elf_rela_sh, Elf64_Rela* elf_rela, Elf64_Sym* elf_rela_sym){
     unsigned char syminfo;
     unsigned char rela_type;
     int total_rela_entries = elf_rela_sh->sh_size/elf_rela_sh->sh_entsize;
@@ -780,7 +780,7 @@ void ereader_print_rela_section(void* elf_data, Elf64_Shdr* elf_sections, Elf64_
     char* strtabbase = (char*) (elf_data + strtab->sh_offset);
 
     printf("\n=================================================================\n");
-    printf("              RELOCATIONS (.rela.text)\n");
+    printf("              RELOCATIONS (%s)\n",section_name);
     printf("=================================================================\n");
 
     for (int i=0; i < total_rela_entries; i++) {
@@ -846,9 +846,32 @@ bool ereader_print_elf(char* filename){
             Elf64_Shdr* elf_symtab_sh = (Elf64_Shdr*) &elf_sections[symtab_index];
             Elf64_Sym* elf_symtab_sym = (Elf64_Sym*) (elf_data+elf_symtab_sh->sh_offset);
 
-            ereader_print_rela_section(elf_data, elf_sections, elf_symtab_sh, elf_relatext_sh, elf_relatext_rela, elf_symtab_sym);
+            ereader_print_rela_section(".rela.text",elf_data, elf_sections, elf_symtab_sh, elf_relatext_sh, elf_relatext_rela, elf_symtab_sym);
         }
 
+        int reladatalocal = ereader_find_section_by_name(elf_data,elf_header,elf_sections,".rela.data.rel.local");
+
+        if (reladatalocal != -1) {
+            Elf64_Shdr* elf_reladatalocal_sh = (Elf64_Shdr*) &elf_sections[reladatalocal];
+            Elf64_Rela* elf_reladatalocal_rela = (Elf64_Rela*) (elf_data + elf_reladatalocal_sh->sh_offset);
+
+            Elf64_Shdr* elf_symtab_sh = (Elf64_Shdr*) &elf_sections[symtab_index];
+            Elf64_Sym* elf_symtab_sym = (Elf64_Sym*) (elf_data+elf_symtab_sh->sh_offset);
+
+            ereader_print_rela_section(".rela.data.rel.local",elf_data, elf_sections, elf_symtab_sh, elf_reladatalocal_sh, elf_reladatalocal_rela, elf_symtab_sym);
+        }
+
+        int relaeh_frame = ereader_find_section_by_name(elf_data,elf_header,elf_sections,".rela.eh_frame");
+
+        if (reladatalocal != -1) {
+            Elf64_Shdr* elf_relaeh_frame_sh = (Elf64_Shdr*) &elf_sections[relaeh_frame];
+            Elf64_Rela* elf_relaeh_frame_rela = (Elf64_Rela*) (elf_data + elf_relaeh_frame_sh->sh_offset);
+
+            Elf64_Shdr* elf_symtab_sh = (Elf64_Shdr*) &elf_sections[symtab_index];
+            Elf64_Sym* elf_symtab_sym = (Elf64_Sym*) (elf_data+elf_symtab_sh->sh_offset);
+
+            ereader_print_rela_section(".rela.eh_frame",elf_data, elf_sections, elf_symtab_sh, elf_relaeh_frame_sh, elf_relaeh_frame_rela, elf_symtab_sym);
+        }
 
     }
 
