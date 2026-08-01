@@ -672,99 +672,99 @@ void ereader_print_rela_type(unsigned char rel_type){
     switch (rel_type)
     {
     case R_X86_64_NONE:
-        rel_type_str = "R_X86_64_NONE";
+        rel_type_str = RELA_NONE;
         break;
 
     case R_X86_64_64:
-        rel_type_str = "R_X86_64_64";
+        rel_type_str = RELA_64;
         break;
 
     case R_X86_64_PC32:
-        rel_type_str = "R_X86_64_PC32";
+        rel_type_str = RELA_PC32;
         break;
 
     case R_X86_64_GOT32:
-        rel_type_str = "R_X86_64_GOT32";
+        rel_type_str = RELA_GOT32;
         break;
 
     case R_X86_64_PLT32:
-        rel_type_str = "R_X86_64_PLT32";
+        rel_type_str = RELA_PLT32;
         break;
 
     case R_X86_64_COPY:
-        rel_type_str = "R_X86_64_COPY";
+        rel_type_str = RELA_COPY;
         break;
 
     case R_X86_64_GLOB_DAT:
-        rel_type_str = "R_X86_64_GLOB_DAT";
+        rel_type_str = RELA_GLOB_DAT;
         break;
 
     case R_X86_64_JUMP_SLOT:
-        rel_type_str = "R_X86_64_JUMP_SLOT";
+        rel_type_str = RELA_JUMP_SLOT;
         break;
 
     case R_X86_64_RELATIVE:
-        rel_type_str = "R_X86_64_RELATIVE";
+        rel_type_str = RELA_RELATIVE;
         break;
 
     case R_X86_64_GOTPCREL:
-        rel_type_str = "R_X86_64_GOTPCREL";
+        rel_type_str = RELA_GOTPCREL;
         break;
 
     case R_X86_64_32:
-        rel_type_str = "R_X86_64_32";
+        rel_type_str = RELA_32;
         break;
 
     case R_X86_64_32S:
-        rel_type_str = "R_X86_64_32S";
+        rel_type_str = RELA_32S;
         break;
 
     case R_X86_64_16:
-        rel_type_str = "R_X86_64_16";
+        rel_type_str = RELA_16;
         break;
 
     case R_X86_64_PC16:
-        rel_type_str = "R_X86_64_PC16";
+        rel_type_str = RELA_PC16;
         break;
 
     case R_X86_64_8:
-        rel_type_str = "R_X86_64_8";
+        rel_type_str = RELA_8;
         break;
 
     case R_X86_64_PC8:
-        rel_type_str = "R_X86_64_PC8";
+        rel_type_str = RELA_PC8;
         break;
 
     case R_X86_64_PC64:
-        rel_type_str = "R_X86_64_PC64";
+        rel_type_str = RELA_PC64;
         break;
 
     case R_X86_64_GOTOFF64:
-        rel_type_str = "R_X86_64_GOTOFF64";
+        rel_type_str = RELA_GOTOFF64;
         break;
 
     case R_X86_64_GOTPC32:
-        rel_type_str = "R_X86_64_GOTPC32";
+        rel_type_str = RELA_GOTPC32;
         break;
 
     case R_X86_64_SIZE32:
-        rel_type_str = "R_X86_64_SIZE32";
+        rel_type_str = RELA_SIZE32;
         break;
 
     case R_X86_64_SIZE64:
-        rel_type_str = "R_X86_64_SIZE64";
+        rel_type_str = RELA_SIZE64;
         break;
 
     case R_X86_64_GOTPCRELX:
-        rel_type_str = "R_X86_64_GOTPCRELX";
+        rel_type_str = RELA_GOTPCRELX;
         break;
 
     case R_X86_64_REX_GOTPCRELX:
-        rel_type_str = "R_X86_64_REX_GOTPCRELX";
+        rel_type_str = RELA_REX_GOTPCRELX;
         break;
 
     default:
-        rel_type_str = "Unknown relocation type.";
+        rel_type_str = RELA_UNKNOWN;
         break;
     }
     printf("  Relocation type %-18s: %s\n","",rel_type_str);

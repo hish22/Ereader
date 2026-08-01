@@ -93,6 +93,31 @@
 #define OB_SHR "Shared Object File."
 #define OB_CORE "Core Object File."
 
+#define RELA_NONE "R_X86_64_NONE"
+#define RELA_64 "R_X86_64_64"
+#define RELA_PC32 "R_X86_64_PC32"
+#define RELA_GOT32 "R_X86_64_GOT32"
+#define RELA_PLT32 "R_X86_64_PLT32"
+#define RELA_COPY "R_X86_64_COPY"
+#define RELA_GLOB_DAT "R_X86_64_GLOB_DAT"
+#define RELA_JUMP_SLOT "R_X86_64_JUMP_SLOT"
+#define RELA_RELATIVE "R_X86_64_RELATIVE"
+#define RELA_GOTPCREL "R_X86_64_GOTPCREL"
+#define RELA_32 "R_X86_64_32"
+#define RELA_32S "R_X86_64_32S"
+#define RELA_16 "R_X86_64_16"
+#define RELA_PC16 "R_X86_64_PC16"
+#define RELA_8 "R_X86_64_8"
+#define RELA_PC8 "R_X86_64_PC8"
+#define RELA_PC64 "R_X86_64_PC64"
+#define RELA_GOTOFF64 "R_X86_64_GOTOFF64"
+#define RELA_GOTPC32 "R_X86_64_GOTPC32"
+#define RELA_SIZE32 "R_X86_64_SIZE32"
+#define RELA_SIZE64 "R_X86_64_SIZE64"
+#define RELA_GOTPCRELX "R_X86_64_GOTPCRELX"
+#define RELA_REX_GOTPCRELX "R_X86_64_REX_GOTPCRELX"
+#define RELA_UNKNOWN "Unknown relocation type."
+
 bool ereader_read_file(char* ,size_t, void*);
 bool ereader_delete_elf_data(void*);
 bool ereader_print_elf(char*);
