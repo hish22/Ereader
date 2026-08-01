@@ -665,6 +665,143 @@ void ereader_print_symbols(void* elf_data, Elf64_Ehdr* elf_header, Elf64_Shdr* e
     }
 }
 
+/* RELOCATIONS */
+
+void ereader_print_rela_type(unsigned char rel_type){
+    char* rel_type_str = "";
+    switch (rel_type)
+    {
+    case R_X86_64_NONE:
+        rel_type_str = "R_X86_64_NONE";
+        break;
+
+    case R_X86_64_64:
+        rel_type_str = "R_X86_64_64";
+        break;
+
+    case R_X86_64_PC32:
+        rel_type_str = "R_X86_64_PC32";
+        break;
+
+    case R_X86_64_GOT32:
+        rel_type_str = "R_X86_64_GOT32";
+        break;
+
+    case R_X86_64_PLT32:
+        rel_type_str = "R_X86_64_PLT32";
+        break;
+
+    case R_X86_64_COPY:
+        rel_type_str = "R_X86_64_COPY";
+        break;
+
+    case R_X86_64_GLOB_DAT:
+        rel_type_str = "R_X86_64_GLOB_DAT";
+        break;
+
+    case R_X86_64_JUMP_SLOT:
+        rel_type_str = "R_X86_64_JUMP_SLOT";
+        break;
+
+    case R_X86_64_RELATIVE:
+        rel_type_str = "R_X86_64_RELATIVE";
+        break;
+
+    case R_X86_64_GOTPCREL:
+        rel_type_str = "R_X86_64_GOTPCREL";
+        break;
+
+    case R_X86_64_32:
+        rel_type_str = "R_X86_64_32";
+        break;
+
+    case R_X86_64_32S:
+        rel_type_str = "R_X86_64_32S";
+        break;
+
+    case R_X86_64_16:
+        rel_type_str = "R_X86_64_16";
+        break;
+
+    case R_X86_64_PC16:
+        rel_type_str = "R_X86_64_PC16";
+        break;
+
+    case R_X86_64_8:
+        rel_type_str = "R_X86_64_8";
+        break;
+
+    case R_X86_64_PC8:
+        rel_type_str = "R_X86_64_PC8";
+        break;
+
+    case R_X86_64_PC64:
+        rel_type_str = "R_X86_64_PC64";
+        break;
+
+    case R_X86_64_GOTOFF64:
+        rel_type_str = "R_X86_64_GOTOFF64";
+        break;
+
+    case R_X86_64_GOTPC32:
+        rel_type_str = "R_X86_64_GOTPC32";
+        break;
+
+    case R_X86_64_SIZE32:
+        rel_type_str = "R_X86_64_SIZE32";
+        break;
+
+    case R_X86_64_SIZE64:
+        rel_type_str = "R_X86_64_SIZE64";
+        break;
+
+    case R_X86_64_GOTPCRELX:
+        rel_type_str = "R_X86_64_GOTPCRELX";
+        break;
+
+    case R_X86_64_REX_GOTPCRELX:
+        rel_type_str = "R_X86_64_REX_GOTPCRELX";
+        break;
+
+    default:
+        rel_type_str = "Unknown relocation type.";
+        break;
+    }
+    printf("  Relocation type %-18s: %s\n","",rel_type_str);
+}
+
+void ereader_print_rela_section(void* elf_data, Elf64_Shdr* elf_sections, Elf64_Shdr* elf_symtab_sh , Elf64_Shdr* elf_rela_sh, Elf64_Rela* elf_rela, Elf64_Sym* elf_rela_sym){
+    unsigned char syminfo;
+    unsigned char rela_type;
+    int total_rela_entries = elf_rela_sh->sh_size/elf_rela_sh->sh_entsize;
+    
+    // STRTAB HEADER
+    Elf64_Shdr* strtab = (Elf64_Shdr*) &elf_sections[elf_symtab_sh->sh_link];
+    char* strtabbase = (char*) (elf_data + strtab->sh_offset);
+
+    printf("\n=================================================================\n");
+    printf("              RELOCATIONS (.rela.text)\n");
+    printf("=================================================================\n");
+
+    for (int i=0; i < total_rela_entries; i++) {
+        syminfo = ELF64_R_SYM(elf_rela[i].r_info);
+        rela_type = ELF64_R_TYPE(elf_rela[i].r_info);
+        printf("-----------------------------------------------------------------\n");
+        printf("  Relocation [%3d]\n",i);
+        printf("-----------------------------------------------------------------\n");
+        ereader_print_rela_type(rela_type);
+        printf("  %-34s: %lx\n","Offset",elf_rela[i].r_offset);
+        printf("  %-34s: %d\n","Symbol index",syminfo);
+        printf("  %-34s: %lx\n","Symbol value",elf_rela_sym[syminfo].st_value);
+        printf("  %-34s: %s\n","Symbol name",strtabbase + elf_rela_sym[syminfo].st_name);
+        if(elf_rela[i].r_addend < 0) {
+            printf("  %-34s: %ld\n","Addend",elf_rela[i].r_addend);
+        } else {
+            printf("  %-34s: %lx\n","Addend",elf_rela[i].r_addend);
+        }
+    }
+}
+
 /* ALL */
 
 bool ereader_print_elf(char* filename){
@@ -705,6 +842,11 @@ bool ereader_print_elf(char* filename){
         if (relatext != -1) {
             Elf64_Shdr* elf_relatext_sh = (Elf64_Shdr*) &elf_sections[relatext];
             Elf64_Rela* elf_relatext_rela = (Elf64_Rela*) (elf_data + elf_relatext_sh->sh_offset);
+
+            Elf64_Shdr* elf_symtab_sh = (Elf64_Shdr*) &elf_sections[symtab_index];
+            Elf64_Sym* elf_symtab_sym = (Elf64_Sym*) (elf_data+elf_symtab_sh->sh_offset);
+
+            ereader_print_rela_section(elf_data, elf_sections, elf_symtab_sh, elf_relatext_sh, elf_relatext_rela, elf_symtab_sym);
         }
 
 
